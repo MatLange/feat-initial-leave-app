@@ -1,0 +1,17 @@
+{
+  "requires": {
+    "db": {
+      "kind": "sqlite",
+      "[production]": {
+        "kind": "hana"
+      }
+    }
+  },
+  "build": {
+    "target": "gen",
+    "tasks": [
+      { "for": "hana" },
+      { "for": "node-cf" }
+    ]
+  }
+}

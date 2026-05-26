@@ -1,0 +1,8 @@
+node_modules/
+gen/
+.env
+*.sqlite
+*.db
+dist/
+.cds-ts/
+@cds-models/

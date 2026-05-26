@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ES2021",
+    "module": "commonjs",
+    "lib": ["ES2021"],
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "outDir": "gen/srv",
+    "rootDir": ".",
+    "baseUrl": ".",
+    "paths": {
+      "#cds-models/*": ["@cds-models/*"]
+    }
+  },
+  "include": ["srv/**/*.ts", "test/**/*.ts"],
+  "exclude": ["node_modules", "gen"]
+}

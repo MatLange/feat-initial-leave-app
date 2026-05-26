@@ -1,0 +1,228 @@
+{
+  "$schema": "./skill-rules.schema.json",
+  "version": "2.0",
+  "config": {
+    "minConfidenceScore": 3,
+    "showMatchReasons": true,
+    "maxSkillsToShow": 5
+  },
+  "scoring": {
+    "keyword": 2,
+    "keywordPattern": 3,
+    "pathPattern": 4,
+    "directoryMatch": 5,
+    "intentPattern": 4,
+    "contentPattern": 3,
+    "contextPattern": 2
+  },
+  "directoryMappings": {
+    "db": "cds-data-model",
+    "db/data": "cds-data-model",
+    "srv": "cap-handlers",
+    "app": "fiori-elements",
+    "webapp/controller": "ui5-patterns",
+    "webapp/view": "ui5-patterns",
+    "webapp/fragment": "ui5-patterns",
+    "test": "cap-testing",
+    ".github/workflows": "github-actions"
+  },
+  "skills": {
+    "cds-data-model": {
+      "description": "CDS entity definitions, associations, compositions, and data annotations",
+      "priority": 9,
+      "triggers": {
+        "keywords": ["entity", "aspect", "association", "composition", "namespace", "projection", "cds", "cuid", "managed", "localized"],
+        "keywordPatterns": ["\\bentity\\b", "\\baspect\\b", "\\bAssociation to\\b", "\\bComposition of\\b", "\\bnamespace\\b", "\\.cds\\b"],
+        "pathPatterns": ["db/**/*.cds", "**/*.cds", "db/data/**/*.csv"],
+        "intentPatterns": [
+          "(?:create|define|add|model).*(?:entity|data model|table|type|aspect)",
+          "(?:add|define).*(?:association|composition|relation)",
+          "(?:extend|annotate).*(?:entity|type)",
+          "(?:cds|data model).*(?:design|structure)"
+        ],
+        "contentPatterns": ["entity\\s+\\w+", "aspect\\s+\\w+", "Association to", "Composition of", "namespace\\s+\\w+", "@cds\\.", "using\\s+\\w+"]
+      },
+      "relatedSkills": ["cap-handlers", "fiori-elements"]
+    },
+    "cap-handlers": {
+      "description": "CAP service handlers in Node.js/TypeScript — before/on/after hooks, req/res patterns, CQL",
+      "priority": 9,
+      "triggers": {
+        "keywords": ["handler", "srv", "service", "req", "before", "after", "action", "function", "cds.connect", "SELECT", "INSERT", "UPDATE", "DELETE", "req.reject", "req.error"],
+        "keywordPatterns": ["\\bsrv\\.(on|before|after)\\b", "\\breq\\.reject\\b", "\\breq\\.error\\b", "SELECT\\.from", "INSERT\\.into", "\\bcds\\.connect\\b"],
+        "pathPatterns": ["srv/**/*.ts", "srv/**/*.js", "srv/**/*.cds", "**/*-service.ts", "**/*-handler.ts"],
+        "intentPatterns": [
+          "(?:implement|add|write).*(?:handler|logic|action|function)",
+          "(?:before|after|on).*(?:create|read|update|delete)",
+          "(?:validate|check).*(?:before|request|input)",
+          "(?:custom).*(?:action|function|logic)"
+        ],
+        "contentPatterns": ["srv\\.on\\(", "srv\\.before\\(", "srv\\.after\\(", "req\\.data", "req\\.user", "cds\\.entities", "import cds"]
+      },
+      "excludePatterns": ["test", "spec"],
+      "relatedSkills": ["cds-data-model", "cap-testing"]
+    },
+    "fiori-elements": {
+      "description": "Fiori Elements annotations — List Report, Object Page, @UI, @Common, @Capabilities",
+      "priority": 8,
+      "triggers": {
+        "keywords": ["UI.LineItem", "UI.FieldGroup", "UI.SelectionFields", "UI.HeaderInfo", "Common.Label", "Common.ValueList", "list report", "object page", "fiori", "annotation", "floorplan"],
+        "keywordPatterns": ["@UI\\.", "@Common\\.", "@Capabilities\\.", "@Measures\\.", "list.report", "object.page"],
+        "pathPatterns": ["app/**/*.cds", "app/**/annotations.cds", "app/**/*.json", "app/**/manifest.json"],
+        "intentPatterns": [
+          "(?:add|configure|define).*(?:annotation|UI|list report|object page)",
+          "(?:fiori|floorplan).*(?:configure|setup|create)",
+          "(?:add|show).*(?:column|field|filter|header|section)",
+          "(?:label|value list|value help).*(?:for|on)"
+        ],
+        "contentPatterns": ["@UI\\.LineItem", "@UI\\.FieldGroup", "@UI\\.SelectionFields", "@Common\\.Label", "@Capabilities\\."]
+      },
+      "relatedSkills": ["cds-data-model", "ui5-patterns"]
+    },
+    "ui5-patterns": {
+      "description": "UI5 controller, view XML, model binding, event handling, fragments",
+      "priority": 7,
+      "triggers": {
+        "keywords": ["controller", "view", "fragment", "model", "binding", "odata", "sap.m", "sap.ui", "onPress", "onInit", "xmlview", "byId"],
+        "keywordPatterns": ["\\bcontroller\\b", "\\bgetView\\b", "\\bbyId\\b", "\\bonInit\\b", "sap\\.ui\\.", "sap\\.m\\.", "\\bJSONModel\\b", "\\bODataModel\\b"],
+        "pathPatterns": ["webapp/**/*.js", "webapp/**/*.xml", "webapp/**/controller/*.js", "webapp/**/view/*.xml", "webapp/**/fragment/*.xml"],
+        "intentPatterns": [
+          "(?:create|add|write).*(?:controller|view|fragment)",
+          "(?:bind|connect).*(?:model|data|odata)",
+          "(?:handle|add).*(?:event|press|change|select)",
+          "(?:ui5|sapui5).*(?:component|control|pattern)"
+        ],
+        "contentPatterns": ["sap\\.ui\\.define", "Controller\\.extend", "getView\\(\\)", "byId\\(", "setModel\\(", "bindElement\\("]
+      },
+      "relatedSkills": ["fiori-elements"]
+    },
+    "cap-testing": {
+      "description": "CAP integration tests with @sap/cds-test, Jest, HTTP assertions",
+      "priority": 9,
+      "triggers": {
+        "keywords": ["cds-test", "cds.test", "jest", "test", "spec", "supertest", "http", "GET", "POST", "PATCH", "DELETE", "expect"],
+        "keywordPatterns": ["\\bcds\\.test\\b", "\\bGET\\b.*odata", "\\bPOST\\b.*odata", "\\btest(?:s|ing)?\\b", "\\bspec\\b", "\\bexpect\\b"],
+        "pathPatterns": ["test/**/*.js", "test/**/*.ts", "**/*.test.js", "**/*.test.ts", "**/*.spec.js", "**/*.spec.ts"],
+        "intentPatterns": [
+          "(?:write|add|create|fix).*(?:test|spec)",
+          "(?:test|verify).*(?:service|handler|entity|action)",
+          "(?:integration|unit).*(?:test)"
+        ],
+        "contentPatterns": ["cds\\.test\\(", "const\\s+\\w+\\s*=\\s*cds\\.test", "describe\\(", "it\\(", "expect\\(", "\\.GET\\(", "\\.POST\\("]
+      },
+      "excludePatterns": ["e2e", "selenium"]
+    },
+    "testing-patterns": {
+      "description": "Jest testing patterns, factory functions, TDD workflow for CAP projects",
+      "priority": 8,
+      "triggers": {
+        "keywords": ["test", "jest", "spec", "tdd", "mock", "factory", "unit test"],
+        "keywordPatterns": ["\\btest(?:s|ing)?\\b", "\\bspec\\b", "unit test", "\\btdd\\b"],
+        "pathPatterns": ["test/**/*.js", "test/**/*.ts", "**/*.test.js", "**/*.test.ts"],
+        "intentPatterns": [
+          "(?:write|add|create|fix).*(?:test|spec)",
+          "(?:test|spec).*(?:for|of|the)",
+          "(?:red.green.refactor|tdd)"
+        ],
+        "contentPatterns": ["describe\\(", "it\\(", "expect\\(", "jest\\.mock", "getMock"]
+      },
+      "excludePatterns": ["e2e", "integration"]
+    },
+    "systematic-debugging": {
+      "description": "Four-phase debugging with root cause analysis — for CAP handler, CDS, and OData issues",
+      "priority": 9,
+      "triggers": {
+        "keywords": ["bug", "debug", "fix", "error", "issue", "broken", "crash", "failing", "500", "404", "400"],
+        "keywordPatterns": ["\\bbug\\b", "\\bfix\\b", "\\berror\\b", "\\bissue\\b", "doesn't work", "not working", "HTTP \\d{3}"],
+        "intentPatterns": [
+          "(?:fix|debug|resolve|investigate).*(?:bug|error|issue|problem)",
+          "(?:why).*(?:not working|broken|failing|crash)",
+          "(?:something).*(?:wrong|broken)",
+          "(?:odata|cds|handler).*(?:error|fail|wrong)"
+        ]
+      },
+      "excludePatterns": ["fix typo", "fix formatting", "fix lint"]
+    },
+    "github-actions": {
+      "description": "GitHub Actions CI/CD workflow patterns for SAP CAP projects",
+      "priority": 6,
+      "triggers": {
+        "keywords": ["github action", "github workflow", "workflow", "ci/cd", "cicd", "pipeline", "ci", "cd", "deploy", "mta", "cf push"],
+        "keywordPatterns": ["github.action", "ci/?cd", "\\bworkflow\\b", "\\bmta\\b", "cf push"],
+        "pathPatterns": [".github/workflows/**", ".github/**/*.yml", ".github/**/*.yaml", "mta.yaml", "manifest.yml"],
+        "intentPatterns": [
+          "(?:create|add|update).*(?:workflow|action|pipeline|deploy)",
+          "(?:ci|cd).*(?:pipeline|workflow)",
+          "(?:deploy).*(?:cloud foundry|btp|cap)"
+        ],
+        "contentPatterns": ["runs-on:", "uses:", "steps:", "cf push", "mbt build"]
+      }
+    },
+    "receiving-code-review": {
+      "description": "Handle code review feedback with rigor",
+      "priority": 4,
+      "triggers": {
+        "keywords": ["code review", "pr feedback", "review comment", "pr comment", "reviewer"],
+        "keywordPatterns": ["code.review", "pr.feedback", "review.comment"],
+        "intentPatterns": [
+          "(?:respond|address|handle).*(?:review|feedback|comment)",
+          "(?:reviewer).*(?:said|suggested|asked)"
+        ],
+        "contextPatterns": ["from the reviewer", "in the pr", "review feedback"]
+      }
+    },
+    "documentation": {
+      "description": "Documentation standards — JSDoc, CDS doc comments, README, API docs",
+      "priority": 3,
+      "triggers": {
+        "keywords": ["documentation", "jsdoc", "readme", "docs", "comment", "api doc"],
+        "keywordPatterns": ["\\bdoc(?:s|umentation)?\\b", "\\breadme\\b"],
+        "pathPatterns": ["**/docs/**", "**/*.md", "**/README*"],
+        "intentPatterns": [
+          "(?:write|add|update).*(?:doc|documentation|comment)",
+          "(?:document).*(?:service|entity|api|action)"
+        ]
+      }
+    },
+    "typescript-conventions": {
+      "description": "TypeScript strict mode and conventions for CAP handler files",
+      "priority": 5,
+      "triggers": {
+        "keywords": ["typescript", "type", "interface", "generic", "strict mode", "unknown", "types"],
+        "keywordPatterns": ["\\btype\\b", "\\binterface\\b", "\\bgeneric\\b", "\\bunknown\\b"],
+        "pathPatterns": ["**/*.d.ts", "**/types/**", "**/types.ts", "srv/**/*.ts"],
+        "intentPatterns": [
+          "(?:define|create).*(?:type|interface)",
+          "(?:type).*(?:error|issue)",
+          "(?:typescript).*(?:handler|service)"
+        ],
+        "contentPatterns": ["interface ", "type ", ": unknown", "as const", "import type"]
+      },
+      "excludePatterns": ["issue type", "type of bug"]
+    },
+    "verification-before-completion": {
+      "description": "Evidence-based completion claims protocol — run tests and lint before claiming done",
+      "priority": 8,
+      "triggers": {
+        "keywords": ["verify", "check", "confirm", "done", "complete", "finished"],
+        "intentPatterns": [
+          "(?:is it|are we).*(?:done|complete|finished)",
+          "(?:verify|check|confirm).*(?:works|passes)"
+        ],
+        "contextPatterns": ["before claiming", "make sure", "double check"]
+      }
+    },
+    "defense-in-depth": {
+      "description": "Multi-layer validation — CDS annotations, handler validation, OData constraints",
+      "priority": 6,
+      "triggers": {
+        "keywords": ["validation", "guard", "defense", "layer", "prevent", "assert", "restrict"],
+        "intentPatterns": [
+          "(?:prevent|avoid).*(?:bug|error|issue)",
+          "(?:add).*(?:validation|guard|check|restriction)"
+        ]
+      },
+      "relatedSkills": ["systematic-debugging", "cds-data-model"]
+    }
+  }
+}

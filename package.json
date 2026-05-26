@@ -1,0 +1,31 @@
+{
+  "name": "leave-request-manager",
+  "version": "1.0.0",
+  "description": "SAP CAP App for digital leave request management",
+  "scripts": {
+    "start": "cds-serve",
+    "dev": "cds watch",
+    "test": "jest --testEnvironment node --forceExit",
+    "lint": "npx cds-lint",
+    "typecheck": "npx tsc --noEmit",
+    "build": "cds build"
+  },
+  "dependencies": {
+    "@sap/cds": "^8",
+    "@sap/cds-dk": "^8",
+    "express": "^4"
+  },
+  "devDependencies": {
+    "@sap/cds-test": "^0.3",
+    "@types/jest": "^29",
+    "@types/node": "^20",
+    "jest": "^29",
+    "ts-jest": "^29",
+    "typescript": "^5"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "testMatch": ["**/test/**/*.test.ts"]
+  }
+}
