@@ -14,7 +14,7 @@ const getMockLeaveRequest = (overrides: Partial<Record<string, unknown>> = {}) =
     employee_ID: '', // will be set after employee creation
     startDate: startDate.toISOString().split('T')[0],
     endDate: endDate.toISOString().split('T')[0],
-    type: 'Annual',
+    leaveType: 'Annual',
     reason: 'Summer vacation',
     ...overrides,
   };

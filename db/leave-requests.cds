@@ -1,6 +1,9 @@
 namespace leavemanager;
 using { cuid, managed } from '@sap/cds/common';
 
+type LeaveStatus : String(20) enum { Draft; Submitted; Approved; Rejected; };
+type LeaveType   : String(20) enum { Annual; Sick; Special; };
+
 entity Employees : cuid, managed {
   name       : String(200) @mandatory;
   email      : String(200);
@@ -11,12 +14,10 @@ entity LeaveRequests : cuid, managed {
   employee        : Association to Employees @mandatory;
   startDate       : Date @mandatory;
   endDate         : Date @mandatory;
-  type            : String(20) @mandatory
-    @assert.range enum { Annual; Sick; Special; };
+  leaveType       : LeaveType @mandatory;
   reason          : String(500);
-  status          : String(20) default 'Draft'
-    @assert.range enum { Draft; Submitted; Approved; Rejected; };
+  status          : LeaveStatus default 'Draft';
   approver        : String(100);
   rejectionReason : String(500);
-  durationDays    : virtual Integer;
+  virtual durationDays : Integer @readonly;
 }

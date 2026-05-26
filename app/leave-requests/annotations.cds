@@ -18,7 +18,7 @@ annotate LeaveService.LeaveRequests with @(
     },
     {
       $Type: 'UI.DataField',
-      Value: type,
+      Value: leaveType,
       Label: 'Typ',
       @UI.Importance: #High
     },
@@ -63,7 +63,7 @@ annotate LeaveService.LeaveRequests with @(
     },
   },
 
-  UI.SelectionFields: [ status, type, startDate ],
+  UI.SelectionFields: [ status, leaveType, startDate ],
 
   UI.HeaderInfo: {
     TypeName:       'Leave Request',
@@ -126,7 +126,7 @@ annotate LeaveService.LeaveRequests with {
                   };
   startDate       @Common.Label: 'Von';
   endDate         @Common.Label: 'Bis';
-  type            @Common.Label: 'Typ'
+  leaveType       @Common.Label: 'Typ'
                   @Common.ValueListWithFixedValues;
   reason          @Common.Label: 'Begründung';
   status          @Common.Label: 'Status'

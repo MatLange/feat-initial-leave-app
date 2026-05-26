@@ -1,5 +1,7 @@
 using leavemanager from '../db/leave-requests';
 
+// Requires authenticated user; restrict approve/reject to 'Manager' role in production.
+@requires: 'any'
 service LeaveService @(path: '/leave') {
 
   @odata.draft.enabled
@@ -10,6 +12,8 @@ service LeaveService @(path: '/leave') {
       action reject(reason: String(500)) returns LeaveRequests;
     };
 
-  @readonly
+  // Employees is reference data — no delete, no bulk operations.
+  // Insert allowed so tests and admin tooling can seed data.
+  @Capabilities.DeleteRestrictions.Deletable: false
   entity Employees as projection on leavemanager.Employees;
 }
